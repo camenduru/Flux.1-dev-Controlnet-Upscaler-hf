@@ -1,5 +1,5 @@
 accelerate
-diffusers=0.30
+diffusers==0.30
 torch==2.0.1
 transformers >= 4.34.0
 xformers
