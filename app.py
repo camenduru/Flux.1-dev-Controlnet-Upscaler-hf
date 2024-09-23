@@ -8,7 +8,6 @@ import spaces
 import torch
 from diffusers import FluxControlNetModel
 from diffusers.pipelines import FluxControlNetPipeline
-from diffusers.utils import load_image
 from gradio_imageslider import ImageSlider
 from PIL import Image
 
@@ -46,12 +45,12 @@ def process_input(input_image, upscale_factor, **kwargs):
 
     if w * h * upscale_factor**2 > MAX_PIXEL_BUDGET:
         warnings.warn(
-            f"Input image is too large ({w}x{h}). Resizing to {MAX_PIXEL_BUDGET} pixels."
+            f"Requested output image is too large ({w * upscale_factor}x{h * upscale_factor}). Resizing to ({int(aspect_ratio * MAX_PIXEL_BUDGET ** 0.5 // upscale_factor), int(MAX_PIXEL_BUDGET ** 0.5 // aspect_ratio // upscale_factor)}) pixels."
         )
         input_image = input_image.resize(
             (
-                int(aspect_ratio * MAX_PIXEL_BUDGET // upscale_factor),
-                int(MAX_PIXEL_BUDGET // aspect_ratio // upscale_factor),
+                int(aspect_ratio * MAX_PIXEL_BUDGET**0.5 // upscale_factor),
+                int(MAX_PIXEL_BUDGET**0.5 // aspect_ratio // upscale_factor),
             )
         )
 
@@ -63,22 +62,20 @@ def process_input(input_image, upscale_factor, **kwargs):
     return input_image.resize((w, h)), w_original, h_original
 
 
-# @spaces.GPU
+@spaces.GPU
 def infer(
     seed,
     randomize_seed,
     input_image,
     num_inference_steps,
     upscale_factor,
+    controlnet_conditioning_scale,
     progress=gr.Progress(track_tqdm=True),
 ):
-    print(input_image)
     if randomize_seed:
         seed = random.randint(0, MAX_SEED)
-
+    true_input_image = input_image
     input_image, w_original, h_original = process_input(input_image, upscale_factor)
-
-    print(input_image.size, w_original, h_original)
 
     # rescale with upscale factor
     w, h = input_image.size
@@ -89,7 +86,7 @@ def infer(
     image = pipe(
         prompt="",
         control_image=control_image,
-        controlnet_conditioning_scale=0.6,
+        controlnet_conditioning_scale=controlnet_conditioning_scale,
         num_inference_steps=num_inference_steps,
         guidance_scale=3.5,
         height=control_image.size[1],
@@ -101,7 +98,7 @@ def infer(
     image = image.resize((w_original * upscale_factor, h_original * upscale_factor))
     image.save("output.jpg")
     # convert to numpy
-    return [input_image, image]
+    return [true_input_image, image, seed]
 
 
 with gr.Blocks(css=css) as demo:
@@ -135,6 +132,13 @@ with gr.Blocks(css=css) as demo:
                 step=1,
                 value=4,
             )
+            controlnet_conditioning_scale = gr.Slider(
+                label="Controlnet Conditioning Scale",
+                minimum=0.1,
+                maximum=1.5,
+                step=0.1,
+                value=0.6,
+            )
             seed = gr.Slider(
                 label="Seed",
                 minimum=0,
@@ -166,10 +170,17 @@ with gr.Blocks(css=css) as demo:
     gr.on(
         [run_button.click],
         fn=infer,
-        inputs=[seed, randomize_seed, input_im, num_inference_steps, upscale_factor],
+        inputs=[
+            seed,
+            randomize_seed,
+            input_im,
+            num_inference_steps,
+            upscale_factor,
+            controlnet_conditioning_scale,
+        ],
         outputs=result,
         show_api=False,
         # show_progress="minimal",
     )
 
-demo.queue().launch()
+demo.queue().launch(share=True)
