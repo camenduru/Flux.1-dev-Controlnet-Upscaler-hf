@@ -1,5 +1,5 @@
 accelerate
-diffusers==0.30.3
+diffusers @ git+https://github.com/initml/diffusers.git@main
 torch==2.0.1
 transformers >= 4.34.0
 xformers
