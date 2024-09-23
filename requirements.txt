@@ -10,3 +10,4 @@ sentencepiece==0.2.0
 optimum
 beautifulsoup4
 gradio==4.29.0
+gradio_imageslider
