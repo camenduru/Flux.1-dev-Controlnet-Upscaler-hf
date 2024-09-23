@@ -151,9 +151,10 @@ with gr.Blocks(css=css) as demo:
     examples = gr.Examples(
         examples=[
             "examples/image_1.jpg",
-            "examples/image_1.jpg",
-            "examples/image_1.jpg",
-            "examples/image_1.jpg",
+            "examples/image_2.jpg",
+            "examples/image_3.jpg",
+            "examples/image_4.jpg",
+            "examples/image_5.jpg",
         ],
         inputs=input_im,
     )
@@ -171,4 +172,4 @@ with gr.Blocks(css=css) as demo:
         # show_progress="minimal",
     )
 
-demo.queue().launch(share=True)
+demo.queue().launch()
