@@ -179,7 +179,7 @@ with gr.Blocks(css=css) as demo:
             randomize_seed = gr.Checkbox(label="Randomize seed", value=True)
 
     with gr.Row():
-        result = ImageSlider(label="Input / Output", type="pil")
+        result = ImageSlider(label="Input / Output", type="pil", interactive=True)
 
     examples = gr.Examples(
         examples=[
