@@ -189,7 +189,7 @@ with gr.Blocks(css=css) as demo:
             "examples/image_4.jpg",
             "examples/image_5.jpg",
             "examples/image_6.jpg",
-            "examples/image_7.jpg"
+            #"examples/image_7.jpg"
         ],
         inputs=input_im,
         outputs=result,
