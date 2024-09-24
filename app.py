@@ -192,6 +192,9 @@ with gr.Blocks(css=css) as demo:
             "examples/image_7.jpg"
         ],
         inputs=input_im,
+        outputs=results,
+        fn=infer,
+        cache_examples=True
     )
 
     gr.Markdown("**Disclaimer:**")
