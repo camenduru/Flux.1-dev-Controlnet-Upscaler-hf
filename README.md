@@ -1,6 +1,6 @@
 ---
-title: Flux.1 Dev Controlnet Upscaler
-emoji: 👀
+title: Flux.1-dev Upscaler
+emoji: 🔎
 colorFrom: green
 colorTo: indigo
 sdk: gradio
