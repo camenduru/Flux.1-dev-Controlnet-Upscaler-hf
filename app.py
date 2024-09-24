@@ -133,10 +133,10 @@ with gr.Blocks(css=css) as demo:
     gr.Markdown(
         f"""
     # ⚡ Flux.1-dev Upscaler ControlNet ⚡
-    This is an interactive demo of [Flux.1-dev Upscaler ControlNet](https://huggingface.co/jasperai/Flux.1-dev-Controlnet-Upscaler taking as input a low resolution image to generate a high resolution image.
+    This is an interactive demo of [Flux.1-dev Upscaler ControlNet](https://huggingface.co/jasperai/Flux.1-dev-Controlnet-Upscaler) taking as input a low resolution image to generate a high resolution image.
     Currently running on {power_device}.
 
-    *Note*: Even though the model can hamdle higher resolution images, due to GPU memory constraints, this demo was limited to a generated output not exceeding a pixel budget of 1024x1024. If the the requested size exceeds that limited, the input will be first resized keeping the aspect ratio such that the output of the controlNet model does not exceed the allocated pixel budget. The output is then resized to the targeted shape using a simple resizing. This may explain some artifacts for high resolution input. To adress this, run the demo locally or consider implementing a tiling strategy. Happy upscaling! 
+    *Note*: Even though the model can hamdle higher resolution images, due to GPU memory constraints, this demo was limited to a generated output not exceeding a pixel budget of 1024x1024. If the the requested size exceeds that limited, the input will be first resized keeping the aspect ratio such that the output of the controlNet model does not exceed the allocated pixel budget. The output is then resized to the targeted shape using a simple resizing. This may explain some artifacts for high resolution input. To adress this, run the demo locally or consider implementing a tiling strategy. Happy upscaling! 🚀
     """
     )
 
