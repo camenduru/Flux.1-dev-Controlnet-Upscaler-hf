@@ -81,7 +81,7 @@ def process_input(input_image, upscale_factor, **kwargs):
     return input_image.resize((w, h)), w_original, h_original, was_resized
 
 
-@spaces.GPU(duration=75)
+@spaces.GPU(duration=42)
 def infer(
     seed,
     randomize_seed,
@@ -184,10 +184,10 @@ with gr.Blocks(css=css) as demo:
     examples = gr.Examples(
         examples=[
             [42, False, "examples/image_1.jpg", 28, 4, 0.6],
-            [42, False, "examples/image_2.jpg", 28, 4, 0.6],
-            [42, False, "examples/image_3.jpg", 28, 4, 0.6],
+            #[42, False, "examples/image_2.jpg", 28, 4, 0.6],
+            #[42, False, "examples/image_3.jpg", 28, 4, 0.6],
             [42, False, "examples/image_4.jpg", 28, 4, 0.6],
-            [42, False, "examples/image_5.jpg", 28, 4, 0.6],
+            #[42, False, "examples/image_5.jpg", 28, 4, 0.6],
             [42, False, "examples/image_6.jpg", 28, 4, 0.6],
         ],
         inputs=[
@@ -201,6 +201,26 @@ with gr.Blocks(css=css) as demo:
         fn=infer,
         outputs=result,
         cache_examples=True,
+    )
+
+    examples = gr.Examples(
+        examples=[
+            #[42, False, "examples/image_1.jpg", 28, 4, 0.6],
+            [42, False, "examples/image_2.jpg", 28, 4, 0.6],
+            [42, False, "examples/image_3.jpg", 28, 4, 0.6],
+            #[42, False, "examples/image_4.jpg", 28, 4, 0.6],
+            [42, False, "examples/image_5.jpg", 28, 4, 0.6],
+            #[42, False, "examples/image_6.jpg", 28, 4, 0.6],
+            [42, False, "examples/image_7.jpg", 28, 4, 0.6],
+        ],
+        inputs=[
+            seed,
+            randomize_seed,
+            input_im,
+            num_inference_steps,
+            upscale_factor,
+            controlnet_conditioning_scale,
+        ],
     )
 
     gr.Markdown("**Disclaimer:**")
