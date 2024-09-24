@@ -10,6 +10,7 @@ from diffusers import FluxControlNetModel
 from diffusers.pipelines import FluxControlNetPipeline
 from gradio_imageslider import ImageSlider
 from PIL import Image
+from huggingface_hub import snapshot_download
 
 css = """
 #col-container {
@@ -25,12 +26,24 @@ else:
     power_device = "CPU"
     device = "cpu"
 
+
+huggingface_token = os.getenv("HUGGINFACE_TOKEN")
+
+model_path = snapshot_download(
+    repo_id="black-forest-labs/FLUX.1-dev", 
+    repo_type="model", 
+    ignore_patterns=["*.md", "*..gitattributes"],
+    local_dir="FLUX.1-dev",
+    token=huggingface_token, # type a new token-id.
+)
+
+
 # Load pipeline
 controlnet = FluxControlNetModel.from_pretrained(
     "jasperai/Flux.1-dev-Controlnet-Upscaler", torch_dtype=torch.bfloat16
 ).to(device)
 pipe = FluxControlNetPipeline.from_pretrained(
-    "black-forest-labs/FLUX.1-dev", controlnet=controlnet, torch_dtype=torch.bfloat16
+    model_path, controlnet=controlnet, torch_dtype=torch.bfloat16
 )
 pipe.to(device)
 
