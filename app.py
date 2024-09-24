@@ -192,7 +192,7 @@ with gr.Blocks(css=css) as demo:
             "examples/image_7.jpg"
         ],
         inputs=input_im,
-        outputs=results,
+        outputs=result,
         fn=infer,
         cache_examples=True
     )
