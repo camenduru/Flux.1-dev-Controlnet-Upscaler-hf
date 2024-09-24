@@ -183,16 +183,24 @@ with gr.Blocks(css=css) as demo:
 
     examples = gr.Examples(
         examples=[
-            "examples/image_1.jpg",
-            "examples/image_2.jpg",
-            "examples/image_3.jpg",
-            "examples/image_4.jpg",
-            "examples/image_5.jpg",
-            "examples/image_6.jpg",
-            #"examples/image_7.jpg"
+            [42, False, "examples/image_1.jpg", 28, 4, 0.6],
+            [42, False, "examples/image_2.jpg", 28, 4, 0.6],
+            [42, False, "examples/image_3.jpg", 28, 4, 0.6],
+            [42, False, "examples/image_4.jpg", 28, 4, 0.6],
+            [42, False, "examples/image_5.jpg", 28, 4, 0.6],
+            [42, False, "examples/image_6.jpg", 28, 4, 0.6],
         ],
-        inputs=input_im,
-        cache_examples=True
+        inputs=[
+            seed,
+            randomize_seed,
+            input_im,
+            num_inference_steps,
+            upscale_factor,
+            controlnet_conditioning_scale,
+        ],
+        fn=infer,
+        outputs=result,
+        cache_examples=True,
     )
 
     gr.Markdown("**Disclaimer:**")
