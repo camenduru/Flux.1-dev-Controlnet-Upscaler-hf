@@ -63,7 +63,7 @@ def process_input(input_image, upscale_factor, **kwargs):
             f"Requested output image is too large ({w * upscale_factor}x{h * upscale_factor}). Resizing to ({int(aspect_ratio * MAX_PIXEL_BUDGET ** 0.5 // upscale_factor), int(MAX_PIXEL_BUDGET ** 0.5 // aspect_ratio // upscale_factor)}) pixels."
         )
         gr.Info(
-            f"Requested output image is too large ({w * upscale_factor}x{h * upscale_factor}). Resizing to ({int(aspect_ratio * MAX_PIXEL_BUDGET ** 0.5 // upscale_factor), int(MAX_PIXEL_BUDGET ** 0.5 // aspect_ratio // upscale_factor)}) input pixels budget."
+            f"Requested output image is too large ({w * upscale_factor}x{h * upscale_factor}). Resizing input to ({int(aspect_ratio * MAX_PIXEL_BUDGET ** 0.5 // upscale_factor), int(MAX_PIXEL_BUDGET ** 0.5 // aspect_ratio // upscale_factor)}) pixels budget."
         )
         input_image = input_image.resize(
             (
@@ -104,6 +104,7 @@ def infer(
 
     generator = torch.Generator().manual_seed(seed)
 
+    gr.Info("Upscaling image...")
     image = pipe(
         prompt="",
         control_image=control_image,
@@ -117,7 +118,7 @@ def infer(
 
     if was_resized:
         gr.Info(
-            f"Resized output image to targeted {w_original * upscale_factor}x{h_original * upscale_factor} size."
+            f"Resizing output image to targeted {w_original * upscale_factor}x{h_original * upscale_factor} size."
         )
 
     # resize to target desired size
