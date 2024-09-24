@@ -56,9 +56,14 @@ def process_input(input_image, upscale_factor, **kwargs):
     w_original, h_original = w, h
     aspect_ratio = w / h
 
+    was_resized = False
+
     if w * h * upscale_factor**2 > MAX_PIXEL_BUDGET:
         warnings.warn(
             f"Requested output image is too large ({w * upscale_factor}x{h * upscale_factor}). Resizing to ({int(aspect_ratio * MAX_PIXEL_BUDGET ** 0.5 // upscale_factor), int(MAX_PIXEL_BUDGET ** 0.5 // aspect_ratio // upscale_factor)}) pixels."
+        )
+        gr.Info(
+            f"Requested output image is too large ({w * upscale_factor}x{h * upscale_factor}). Resizing to ({int(aspect_ratio * MAX_PIXEL_BUDGET ** 0.5 // upscale_factor), int(MAX_PIXEL_BUDGET ** 0.5 // aspect_ratio // upscale_factor)}) input pixels budget."
         )
         input_image = input_image.resize(
             (
@@ -66,16 +71,17 @@ def process_input(input_image, upscale_factor, **kwargs):
                 int(MAX_PIXEL_BUDGET**0.5 // aspect_ratio // upscale_factor),
             )
         )
+        was_resized = True
 
     # resize to multiple of 8
     w, h = input_image.size
     w = w - w % 8
     h = h - h % 8
 
-    return input_image.resize((w, h)), w_original, h_original
+    return input_image.resize((w, h)), w_original, h_original, was_resized
 
 
-@spaces.GPU
+@spaces.GPU(duration=75)
 def infer(
     seed,
     randomize_seed,
@@ -88,7 +94,9 @@ def infer(
     if randomize_seed:
         seed = random.randint(0, MAX_SEED)
     true_input_image = input_image
-    input_image, w_original, h_original = process_input(input_image, upscale_factor)
+    input_image, w_original, h_original, was_resized = process_input(
+        input_image, upscale_factor
+    )
 
     # rescale with upscale factor
     w, h = input_image.size
@@ -106,6 +114,11 @@ def infer(
         width=control_image.size[0],
         generator=generator,
     ).images[0]
+
+    if was_resized:
+        gr.Info(
+            f"Resized output image to targeted {w_original * upscale_factor}x{h_original * upscale_factor} size."
+        )
 
     # resize to target desired size
     image = image.resize((w_original * upscale_factor, h_original * upscale_factor))
