@@ -185,10 +185,10 @@ with gr.Blocks(css=css) as demo:
         examples=[
             [42, False, "examples/image_1.jpg", 28, 4, 0.6],
             #[42, False, "examples/image_2.jpg", 28, 4, 0.6],
-            #[42, False, "examples/image_3.jpg", 28, 4, 0.6],
+            [42, False, "examples/image_3.jpg", 28, 4, 0.6],
             [42, False, "examples/image_4.jpg", 28, 4, 0.6],
             #[42, False, "examples/image_5.jpg", 28, 4, 0.6],
-            [42, False, "examples/image_6.jpg", 28, 4, 0.6],
+            #[42, False, "examples/image_6.jpg", 28, 4, 0.6],
         ],
         inputs=[
             seed,
@@ -207,10 +207,10 @@ with gr.Blocks(css=css) as demo:
         examples=[
             #[42, False, "examples/image_1.jpg", 28, 4, 0.6],
             [42, False, "examples/image_2.jpg", 28, 4, 0.6],
-            [42, False, "examples/image_3.jpg", 28, 4, 0.6],
+            #[42, False, "examples/image_3.jpg", 28, 4, 0.6],
             #[42, False, "examples/image_4.jpg", 28, 4, 0.6],
             [42, False, "examples/image_5.jpg", 28, 4, 0.6],
-            #[42, False, "examples/image_6.jpg", 28, 4, 0.6],
+            [42, False, "examples/image_6.jpg", 28, 4, 0.6],
             [42, False, "examples/image_7.jpg", 28, 4, 0.6],
         ],
         inputs=[
