@@ -81,7 +81,7 @@ def process_input(input_image, upscale_factor, **kwargs):
     return input_image.resize((w, h)), w_original, h_original, was_resized
 
 
-@spaces.GPU(duration=42)
+@spaces.GPU#(duration=42)
 def infer(
     seed,
     randomize_seed,
